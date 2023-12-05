@@ -102,11 +102,10 @@ public class Professor {
 
     @Override
     public String toString() {
-        return "{name='" + name + '\'' +
-                ", rating=" + rating +
-                ", numOfRatings=" + numOfRatings +
-                ", difficulty=" + difficulty +
-                '}';
+        return "'" + name + '\'' +
+                ", rate:" + rating +
+                ", NumRate:" + numOfRatings +
+                ", Hardness:" + difficulty;
     }
 
 }

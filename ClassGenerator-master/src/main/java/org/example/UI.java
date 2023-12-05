@@ -1,8 +1,6 @@
 package org.example;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -25,7 +23,6 @@ public class UI {
 
     public void testRunUI() {
         try {
-            // Set the Nimbus look and feel
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,43 +33,36 @@ public class UI {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(2000, 800);
 
-            // Create a panel for the main content
             JPanel contentPanel = new JPanel(new BorderLayout());
-            contentPanel.setBorder(new EmptyBorder(20, 20, 20, 20)); // Add padding
+            contentPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
-            // Create a panel for the title and subtitle, centered
             JPanel titlePanel = new JPanel(new BorderLayout());
             titlePanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 20, 0));
 
             titleLabel(titlePanel);
 
-            // WordToggleButton
             WordToggleButton wordToggleButton = new WordToggleButton();
             titlePanel.add(wordToggleButton, BorderLayout.SOUTH);
 
             contentPanel.add(titlePanel, BorderLayout.NORTH);
 
-            // Create three columns (a little bigger)
-            JPanel mainPanel = new JPanel(new GridLayout(1, 3, 20, 20)); // Add margins between columns
-            mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20)); // Add padding
+            JPanel mainPanel = new JPanel(new GridLayout(1, 3, 20, 20));
+            mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
-            // First Column
             DefaultListModel<String> toDoModel = new DefaultListModel<>();
             JList<String> toDoList = new JList<>(toDoModel);
             JScrollPane toDoScrollPane = new JScrollPane(toDoList);
-            mainPanel.add(createColumnPanel("To-Do", toDoScrollPane, 16));
+            mainPanel.add(createColumnPanel("To-Do", toDoScrollPane, 16, wordToggleButton));
 
-            // Second Column
             DefaultListModel<String> inProgressModel = new DefaultListModel<>();
             JList<String> inProgressList = new JList<>(inProgressModel);
             JScrollPane inProgressScrollPane = new JScrollPane(inProgressList);
-            mainPanel.add(createColumnPanel("In Progress", inProgressScrollPane, 16));
+            mainPanel.add(createColumnPanel("In Progress", inProgressScrollPane, 16, wordToggleButton));
 
-            // Third Column
             DefaultListModel<String> doneModel = new DefaultListModel<>();
             JList<String> doneList = new JList<>(doneModel);
             JScrollPane doneScrollPane = new JScrollPane(doneList);
-            mainPanel.add(createColumnPanel("Done", doneScrollPane, 16));
+            mainPanel.add(createColumnPanel("Done", doneScrollPane, 16, wordToggleButton));
 
             contentPanel.add(mainPanel, BorderLayout.CENTER);
 
@@ -84,78 +74,105 @@ public class UI {
 
     private static void titleLabel(JPanel titlePanel) {
         JLabel titleLabel = new JLabel("Degree Class Generator", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Use a bold Arial font for a modern look
-        titleLabel.setForeground(Color.DARK_GRAY); // Use black color for the title
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setForeground(Color.DARK_GRAY);
         titlePanel.add(titleLabel, BorderLayout.NORTH);
     }
 
-    private JPanel createColumnPanel(String title, JScrollPane scrollPane, int fontSize) {
-    JPanel columnPanel = new JPanel(new BorderLayout());
-    columnPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Add padding
+    private JPanel createColumnPanel(String title, JScrollPane scrollPane, int fontSize, WordToggleButton wordToggleButton) {
+        JPanel columnPanel = new JPanel(new BorderLayout());
+        columnPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-    // Create a new JPanel for the title with a border
-    JPanel titlePanel = new JPanel();
-    titlePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-    titlePanel.setBackground(Color.LIGHT_GRAY);
+        JPanel titlePanel = new JPanel();
+        titlePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+        titlePanel.setBackground(Color.LIGHT_GRAY);
 
-    // Create a new button
-    JButton button = new JButton("Button");
-    button.setFont(new Font("Arial", Font.PLAIN, 14));
-    button.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Define the behavior when the button is clicked
-            System.out.println(title + " button clicked");
+        JButton button = new JButton("Button");
+        button.setFont(new Font("Arial", Font.PLAIN, 14));
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(title + " button clicked");
 
-            // Create a new "+" button
-            JButton plusButton = new JButton("+");
-            plusButton.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Add a grey border
-            plusButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Create an instance of PlusButtonAction and call the execute method
-                    PlusButtonAction plusButtonAction = new PlusButtonAction(classMapFall, classMapSpring, bayesianSorter);
-                    plusButtonAction.execute();
+                // Create a JPanel to hold the sections of "+" and "-" buttons
+                JPanel headerPanel;
+                if (scrollPane.getColumnHeader() == null) {
+                    headerPanel = new JPanel();
+                    headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.PAGE_AXIS));
+                    scrollPane.setColumnHeaderView(headerPanel);
+                } else {
+                    headerPanel = (JPanel) scrollPane.getColumnHeader().getView();
                 }
-            });
 
-            // Create a new "X" button
-            JButton xButton = new JButton("X");
-            xButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Remove the "+" button when the "X" button is clicked
-                    scrollPane.setColumnHeaderView(null);
-                    scrollPane.revalidate();
-                    scrollPane.repaint();
-                }
-            });
+                JLabel bestClassLabel = new JLabel();
+                bestClassLabel.setFont(new Font("Arial", Font.ITALIC, 10));
+                bestClassLabel.setForeground(Color.DARK_GRAY);
+                bestClassLabel.setHorizontalAlignment(JLabel.CENTER);
+                bestClassLabel.setVerticalAlignment(JLabel.CENTER);
 
-            // Set the preferred size of the "+" button to match the "X" button
-            plusButton.setPreferredSize(xButton.getPreferredSize());
+                JButton plusButton = new JButton("+");
+                plusButton.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Add a grey border
+                plusButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Create an instance of PlusButtonAction and call the execute method
+                        PlusButtonAction plusButtonAction = new PlusButtonAction(classMapFall, classMapSpring, bayesianSorter, wordToggleButton, bestClassLabel);
+                        plusButtonAction.execute();
+                    }
+                });
 
-            // Create a panel to hold the "+" and "X" buttons
-            JPanel buttonPanel = new JPanel(new BorderLayout());
-            buttonPanel.add(plusButton, BorderLayout.EAST);
-            buttonPanel.add(xButton, BorderLayout.WEST);
+                JButton xButton = new JButton("X");
+                xButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        scrollPane.setColumnHeaderView(null);
+                        scrollPane.revalidate();
+                        scrollPane.repaint();
+                    }
+                });
+                plusButton.setPreferredSize(xButton.getPreferredSize());
+                JPanel buttonPanel = new JPanel(new GridBagLayout());
+                GridBagConstraints gbc = new GridBagConstraints();
 
-            // Add the buttonPanel to the scrollPane
-            scrollPane.setColumnHeaderView(buttonPanel);
-        }
-    });
+                // Add the "X" button to the west
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.weightx = 0.2; // Increase the weightx of the "X" button
+                buttonPanel.add(xButton, gbc);
 
-    JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
-    titleLabel.setFont(new Font("Arial", Font.BOLD, fontSize));
-    titleLabel.setForeground(Color.WHITE);
+                // Add the bestClassLabel to the center
+                gbc.gridx = 1;
+                gbc.gridy = 0;
+                gbc.weightx = 0.6; // Decrease the weightx of the bestClassLabel
+                buttonPanel.add(bestClassLabel, gbc);
 
-    titlePanel.add(button, BorderLayout.NORTH);
-    titlePanel.add(titleLabel, BorderLayout.CENTER);
+                // Add the "+" button to the east
+                gbc.gridx = 2;
+                gbc.gridy = 0;
+                gbc.weightx = 0.2; // Increase the weightx of the "+" button
+                buttonPanel.add(plusButton, gbc);
 
-    columnPanel.add(titlePanel, BorderLayout.NORTH);
-    columnPanel.add(scrollPane, BorderLayout.CENTER);
+                // Add the buttonPanel to the headerPanel
+                headerPanel.add(buttonPanel);
 
-    return columnPanel;
-}
+                // Refresh the scrollPane
+                scrollPane.revalidate();
+                scrollPane.repaint();
+            }
+        });
+
+        JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, fontSize));
+        titleLabel.setForeground(Color.WHITE);
+
+        titlePanel.add(button, BorderLayout.NORTH);
+        titlePanel.add(titleLabel, BorderLayout.CENTER);
+
+        columnPanel.add(titlePanel, BorderLayout.NORTH);
+        columnPanel.add(scrollPane, BorderLayout.CENTER);
+
+        return columnPanel;
+    }
 
     private static void centerFrame(JFrame frame) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

@@ -10,26 +10,25 @@ public class PlusButtonAction {
     private final Map<String, List<ClassInfo>> classMapFall;
     private final Map<String, List<ClassInfo>> classMapSpring;
     private final BayesianSorter bayesianSorter;
+    private final WordToggleButton wordToggleButton;
+    private final JLabel bestClassLabel;
 
     public PlusButtonAction(Map<String, List<ClassInfo>> classMapFall,
                             Map<String, List<ClassInfo>> classMapSpring,
-                            BayesianSorter bayesianSorter) {
+                            BayesianSorter bayesianSorter,
+                            WordToggleButton wordToggleButton,
+                            JLabel bestClassLabel) {
         this.classMapFall = classMapFall;
         this.classMapSpring = classMapSpring;
         this.bayesianSorter = bayesianSorter;
+        this.wordToggleButton = wordToggleButton;
+        this.bestClassLabel = bestClassLabel;
     }
 
     public void execute() {
-        try {
-            // Set the Nimbus look and feel
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         // Create a new JFrame
         JFrame frame = new JFrame();
-        frame.setSize(400, 300);
+        frame.setSize(800, 400);
         frame.setLocationRelativeTo(null); // Center the frame
 
         // Create a JPanel to hold the JLabel and JTextField
@@ -38,8 +37,8 @@ public class PlusButtonAction {
         panel.setBackground(new Color(169, 169, 169)); // Set the background color to darkish grey
 
         // Create a JLabel asking "What is the class that you want?"
-        JLabel label = new JLabel("What is the class that you want?", SwingConstants.CENTER);
-        label.setFont(new Font("Arial", Font.PLAIN, 20)); // Use a plain Arial font for a modern look
+        JLabel label = new JLabel("Provide Input Example: Engl 100", SwingConstants.CENTER);
+        label.setFont(new Font("Arial", Font.ITALIC, 20)); // Use a plain Arial font for a modern look
         panel.add(label);
 
         // Create a JTextField for the user to enter the class name
@@ -51,10 +50,11 @@ public class PlusButtonAction {
         submitButton.addActionListener(e -> {
             // Create an instance of DataTest and call the testDataOutput method
             DataTest dataTest = new DataTest(classMapFall, classMapSpring, bayesianSorter);
-            String bestClass = dataTest.testDataOutput(textField.getText());
+            String userInput = wordToggleButton.getSelectedSemester() + " " + textField.getText();
+            String bestClass = dataTest.testDataOutput(userInput);
 
-            // Display the best class with the best rating in a JOptionPane dialog box
-            JOptionPane.showMessageDialog(frame, bestClass);
+            // Update the bestClassLabel with the best class
+            bestClassLabel.setText(bestClass);
         });
         panel.add(submitButton);
 

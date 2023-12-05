@@ -81,13 +81,13 @@ class ClassInfo {
     @Override
     public String toString() {
         if (professor != null) {
-            return "Class: " + className + ", Professor: " + professor +
-                    ", Status: " +
+            return className + ", Prof: " + professor +
+                    ", Stat: " +
                     status + ", Days: " + days + ", CRN: " + crn +
                     ", Units: " + units;
         } else {
-            return "Class: " + className + ", Professor: " + professorName +
-                    ", Status: " +
+            return className + ", Prof: " + professorName +
+                    ", Stat: " +
                     status + ", Days: " + days + ", CRN: " + crn +
                     ", Units: " + units;
         }

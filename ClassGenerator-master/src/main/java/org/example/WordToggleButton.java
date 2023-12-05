@@ -12,6 +12,11 @@ class WordToggleButton extends JPanel {
     private Timer colorTransitionTimer;
     private Color targetColor;
 
+    public String getSelectedSemester() {
+        String selectedSemester = (String) toggleSwitch.getSelectedItem();
+        return selectedSemester.equals("Fall") ? "F" : "S";
+    }
+
     public WordToggleButton() {
         toggleSwitch = new JComboBox<>(words);
         toggleSwitch.setFocusable(false);

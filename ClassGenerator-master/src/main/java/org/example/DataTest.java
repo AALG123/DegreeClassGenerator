@@ -28,7 +28,7 @@ public class DataTest {
             if (course1.equals("null")) {
                 bestClass = "No such course exists.";
             } else {
-                bestClass = "The best class for that course according to our probability is: \n" + bayesianSorter.getBestClass(classMapFall, course);
+                bestClass = "" + bayesianSorter.getBestClass(classMapFall, course);
             }
         } else if (sem.equals("S")) {
             course = capitalizeAndConcatenate(course);
@@ -36,7 +36,7 @@ public class DataTest {
             if (course1.equals("null")) {
                 bestClass = "No such course exists.";
             } else {
-                bestClass = "The best class for that course according to our probability is: \n" + bayesianSorter.getBestClass(classMapSpring, course);
+                bestClass = "" + bayesianSorter.getBestClass(classMapSpring, course);
             }
         } else {
             bestClass = "I couldn't register the semester.";
