@@ -1,0 +1,102 @@
+package org.example;
+
+public class ClassInfo {
+    private String className;
+    private String professorName;
+    private Professor professor;
+    private int crn;
+    private String days;
+    private String status;
+    private int units;
+    private double rankingClass;
+
+    public ClassInfo(String className, String professorName,
+                     int crn, String days, String status, int units) {
+        this.className = className;
+        this.professorName = professorName;
+        this.crn = crn;
+        this.days = days;
+        this.status = status;
+        this.units = units;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getProfessorName() {
+        return professorName;
+    }
+
+    public void setProfessorName(String professorName) {
+        this.professorName = professorName;
+    }
+
+    public int getCrn() {
+        return crn;
+    }
+
+    public void setCrn(int crn) {
+        this.crn = crn;
+    }
+
+    public String getDays() {
+        return days;
+    }
+
+    public void setDays(String days) {
+        this.days = days;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getUnits() {
+        return units;
+    }
+
+    public void setUnits(int units) {
+        this.units = units;
+    }
+
+    public void setProfessorObject(Professor professor) {
+        this.professor = professor;
+        this.professorName = professor.getName();
+    }
+
+    public Professor getProfessorObject() {
+        return professor;
+    }
+
+    public double getRankingClass() {
+        return rankingClass;
+    }
+
+    public void setRankingClass(double rankingClass) {
+        this.rankingClass = rankingClass;
+    }
+
+    @Override
+    public String toString() {
+        if (professor != null) {
+            return className + ", Prof: " + professor +
+                    ", Stat: " +
+                    status + ", Days: " + days + ", CRN: " + crn +
+                    ", Units: " + units;
+        } else {
+            return className + ", Prof: " + professorName +
+                    ", Stat: " +
+                    status + ", Days: " + days + ", CRN: " + crn +
+                    ", Units: " + units;
+        }
+    }
+}
