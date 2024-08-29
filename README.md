@@ -1,6 +1,6 @@
 # DegreeClassGenerator
 
-**Class Generator ** is a powerful course planning tool designed specifically for students at Skyline College, Cañada College, and College of San Mateo (CSM). This application helps students create the most optimal class schedules, tailored to their academic needs, based on the courses available at these institutions.
+**Class Generator** is a powerful course planning tool designed specifically for students at Skyline College, Cañada College, and College of San Mateo (CSM). This application helps students create the most optimal class schedules, tailored to their academic needs, based on the courses available at these institutions.
 
 ## Features
 
